@@ -1,7 +1,7 @@
 package org.pgp.securealgorithm.pgp;
 
-import org.pgp.securealgorithm.utils.MessageInput;
-import org.pgp.securealgorithm.utils.MessageOutput;
+import org.pgp.securealgorithm.message.MessageInput;
+import org.pgp.securealgorithm.message.MessageOutput;
 import org.pgp.wallet.KeyWallet;
 
 import javax.crypto.Cipher;

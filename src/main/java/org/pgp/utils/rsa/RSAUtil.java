@@ -1,4 +1,4 @@
-package org.pgp.securealgorithm.utils;
+package org.pgp.utils.rsa;
 
 import javax.crypto.Cipher;
 import java.security.KeyFactory;

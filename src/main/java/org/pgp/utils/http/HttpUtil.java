@@ -1,4 +1,4 @@
-package org.pgp.securealgorithm.utils.http;
+package org.pgp.utils.http;
 
 import org.pgp.configuration.Config;
 

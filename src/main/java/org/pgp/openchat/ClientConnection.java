@@ -1,6 +1,7 @@
 package org.pgp.openchat;
 
 import org.pgp.securealgorithm.pgp.PGP;
+import org.pgp.utils.json.JsonUtil;
 import org.pgp.wallet.KeyWallet;
 
 import javax.crypto.SecretKey;
@@ -8,6 +9,7 @@ import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ClientConnection implements Runnable{
 
@@ -98,23 +100,26 @@ public class ClientConnection implements Runnable{
                 if(str == null){
                     continue;
                 }
-                if(str.length() >= 18 && str.substring(0, 17 + 1).equals("[userInfoResponse]")){
-                    String[] info = str.split(" ");
-                    for(int i = 1; i < info.length; i+=2){
-                        userMap.put(info[i], info[i+1]);
-                    }
+                Map<String, String> jsonMap = JsonUtil.parseJson(str);
+                String publicKey = jsonMap.get("publicKey");
+                String message = jsonMap.get("message");
+                boolean isValidPublicKey = isValidInput(publicKey);
+                if(!isValidPublicKey){
+                    System.out.println("[Client] Invalid PublicKey.");
                     continue;
-                }else if(str.length() >= 11 && str.substring(0, 11 + 1).equals("[New Member]")){
-                    String strBody = str.substring(11+1, str.length()); // [sss:aaa]
-                    String receivedNickname = strBody.substring(1, strBody.indexOf(":"));
-                    String receivedPublicKey = strBody.substring(strBody.indexOf(":") + 1, strBody.indexOf("]"));
-                    userMap.put(receivedNickname, receivedPublicKey);
-                    continue;
+                }else {
+                    System.out.println("[from: " + publicKey + "] " + message + "\n");
                 }
-                System.out.println("[Client] " + str + "\n");
             }catch(IOException e){
                 e.printStackTrace();
             }
         }
+    }
+
+    public boolean isValidInput(String str){
+        if(str == null || str.isBlank() || str.isEmpty()){
+            return false;
+        }
+        return true;
     }
 }

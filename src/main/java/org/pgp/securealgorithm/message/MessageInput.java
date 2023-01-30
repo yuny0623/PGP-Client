@@ -1,4 +1,4 @@
-package org.pgp.securealgorithm.utils;
+package org.pgp.securealgorithm.message;
 
 public class MessageInput {
     String cipherText;
