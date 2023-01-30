@@ -4,12 +4,11 @@ import org.pgp.securealgorithm.pgp.PGP;
 import org.pgp.utils.json.JsonUtil;
 import org.pgp.wallet.KeyWallet;
 
-import javax.crypto.SecretKey;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class ClientConnection implements Runnable{
 
@@ -27,18 +26,19 @@ public class ClientConnection implements Runnable{
     private int connectionRequestCount;
 
     private Thread thread;
-    private HashMap<String, String> userMap = new HashMap<>();         // nickname, publicKey
-    private HashMap<String, SecretKey> commonKeyMap = new HashMap<>(); // nickname, commonKey -> for DirectMessage
+    private Scanner sc = new Scanner(System.in);
 
     public ClientConnection(String ip, int port){
         this.ip = ip;
         this.port = port;
-        this.nickname = null;
-        System.out.println("[Client] Creating publicKey...");
+        while(this.nickname == null) {
+            System.out.println("[Client] Type nickname: ");
+            this.nickname = sc.nextLine();
+        }
+        System.out.println("[Client] Creating publicKey.");
         this.publicKey = KeyWallet.getMainASymmetricKey().getPublicKey();
-        System.out.println("[Client] Creating privateKey...");
+        System.out.println("[Client] Creating privateKey.");
         this.privateKey = KeyWallet.getMainASymmetricKey().getPrivateKey();
-        this.userMap.put(nickname, publicKey);
         initNet(ip, port);
     }
 
@@ -89,8 +89,9 @@ public class ClientConnection implements Runnable{
     @Override
     public void run() {
         try {
-            out.println(nickname);
-            out.println(publicKey);
+            // send to server
+            String json = JsonUtil.generateJson(this.nickname, this.publicKey);
+            out.println(json);
         }catch(NullPointerException e){
             System.out.println("[Client] Server is not running - " + e.getMessage());
         }
@@ -103,10 +104,10 @@ public class ClientConnection implements Runnable{
                 Map<String, String> jsonMap = JsonUtil.parseJson(str);
                 String publicKey = jsonMap.get("publicKey");
                 String message = jsonMap.get("message");
+                System.out.println("publicKey: " + publicKey + ", message: " + message);
                 boolean isValidPublicKey = isValidInput(publicKey);
                 if(!isValidPublicKey){
                     System.out.println("[Client] Invalid PublicKey.");
-                    continue;
                 }else {
                     System.out.println("[from: " + publicKey + "] " + message + "\n");
                 }

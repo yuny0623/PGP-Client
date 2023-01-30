@@ -6,6 +6,10 @@ import java.util.Base64;
 
 public class AESCipherMaker {
 
+    /*
+        Could get Error when using encrypt method of IllegalBlockSizeException.
+        use encryptWithBase64 method instead.
+    */
     public static String encrypt(String plainText, SecretKey secretKey) throws Exception {
         Cipher aesCipher = Cipher.getInstance("AES");
         aesCipher.init(Cipher.ENCRYPT_MODE, secretKey);
@@ -13,6 +17,10 @@ public class AESCipherMaker {
         return new String(byteCipherText);
     }
 
+    /*
+        Could get Error when using decrypt method of IllegalBlockSizeException.
+        use decryptWithBase64 method instead.
+    */
     public static String decrypt(byte[] byteCipherText, SecretKey secKey) throws Exception {
         Cipher aesCipher = Cipher.getInstance("AES");
         aesCipher.init(Cipher.DECRYPT_MODE, secKey);
@@ -20,10 +28,6 @@ public class AESCipherMaker {
         return new String(bytePlainText);
     }
 
-    /*
-        Could get Error when using encrypt method of IllegalBlockSizeException.
-        use encryptWithBase64 method instead.
-     */
     public static String encryptWithBase64(String body, SecretKey secretKey){
         try {
             Cipher cipher = Cipher.getInstance("AES");
@@ -35,10 +39,6 @@ public class AESCipherMaker {
         }
     }
 
-    /*
-        Could get Error when using decrypt method of IllegalBlockSizeException.
-        use decryptWithBase64 method instead.
-    */
     public static String decryptWithBase64(String encryptedBody, SecretKey secretKey){
         try {
             Cipher cipher = Cipher.getInstance("AES");
