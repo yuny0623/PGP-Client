@@ -8,8 +8,10 @@ public class ClientAction {
     private String ipStr;
     private String ip;
     private InetAddress ia;
+    private String logo;
 
     public ClientAction(){
+        System.out.println("");
         try {
             ia = InetAddress.getLocalHost();
             ipStr = ia.toString();

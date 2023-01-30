@@ -7,7 +7,6 @@ import javax.crypto.SecretKey;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.sql.SQLOutput;
 import java.util.HashMap;
 
 public class ClientConnection implements Runnable{
@@ -41,12 +40,11 @@ public class ClientConnection implements Runnable{
         initNet(ip, port);
     }
 
-    public boolean checkServerLive(){
+    public boolean checkServerLive(String ip, int port){
         while(true){
             System.out.println("[Client] Connecting to server.");
             try{
                 socket = new Socket(ip, port);
-                connectionRequestCount++;
             }catch (UnknownHostException e){
                 System.out.println("[Client] Different IP Address.");
             }catch(IOException e){
@@ -58,19 +56,21 @@ public class ClientConnection implements Runnable{
                 System.out.println("[Client] Cannot connect to server.");
                 return false;
             }
-            else{
-                System.out.println("[Client] Send connection request again.");
+            else {
+                ++connectionRequestCount;
+                System.out.println("[Client] Send connection request again - " +connectionRequestCount + "times.");
             }
         }
     }
 
     public void initNet(String ip, int port){
-        System.out.println("[Client] Initializing Socket connection...");
+        System.out.println("[Client] Initializing Socket connection.");
         try{
-            if(!checkServerLive()){
+            if(!checkServerLive(ip, port)){
                 System.out.println("[Client] Connection failed.");
                 return;
             }
+            System.out.println("[Client] Connection success.");
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out =  new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
         }catch(UnknownHostException e){
