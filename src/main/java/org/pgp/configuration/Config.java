@@ -23,4 +23,12 @@ public final class Config {
     public static final int TCP_IP_CONNECTION_DEFAULT_PORT = 8080;
     public static final HashMap<String, String> KNOWN_IP = new HashMap<>();
     public static final HashMap<String, String> PUBLIC_IP = new HashMap<>();
+
+    // HTTP
+    public static final String HTTP_VERSION = "HTTP/1.1";
+    public static final String HTTP_200_OK = "200 OK";
+    public static final String HTTP_400_BAD_REQUEST = "400 Bad Request";
+    public static final String HTTP_404_NOT_FOUND = "404 Not Found";
+    public static final String HTTP_500_INTERNAL_SERVER_ERROR = "500 Internal Server Error";
+    public static final String HTTP_NEW_LINE = "\r\n\r\n";
 }
