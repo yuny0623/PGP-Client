@@ -1,9 +1,12 @@
 package org.pgp.openchat;
 
+import org.pgp.key.keys.ASymmetricKey;
+import org.pgp.key.keys.SymmetricKey;
 import org.pgp.securealgorithm.pgp.PGP;
 import org.pgp.utils.json.JsonUtil;
 import org.pgp.wallet.KeyWallet;
 
+import javax.crypto.SecretKey;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -24,6 +27,8 @@ public class ClientConnection implements Runnable{
     private String publicKey;
     private String privateKey;
     private int connectionRequestCount;
+    private SymmetricKey symmetricKey;
+    private ASymmetricKey aSymmetricKey;
 
     private Thread thread;
     private Scanner sc = new Scanner(System.in);
@@ -92,6 +97,10 @@ public class ClientConnection implements Runnable{
             // send to server
             String json = JsonUtil.generateJson(this.nickname, this.publicKey);
             out.println(json);
+            // initialize symmetrickey
+            if(symmetricKey == null){
+                symmetricKey = new SymmetricKey();
+            }
         }catch(NullPointerException e){
             System.out.println("[Client] Server is not running - " + e.getMessage());
         }

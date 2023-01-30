@@ -15,6 +15,9 @@ dependencies {
 
     // json
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+    // Hex
+    implementation 'commons-codec:commons-codec:1.14'
 }
 
 test {
